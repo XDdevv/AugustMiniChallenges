@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import zed.rainxch.augustminichallenges.order_queue.presentation.OrderQueueScreenRoot
 import zed.rainxch.augustminichallenges.thermemoter_trek.presentation.ThermemoterTrekScreenRoot
 import zed.rainxch.augustminichallenges.ui.theme.AugustMiniChallengesTheme
 
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AugustMiniChallengesTheme {
-                ThermemoterTrekScreenRoot()
+                OrderQueueScreenRoot()
             }
         }
     }
