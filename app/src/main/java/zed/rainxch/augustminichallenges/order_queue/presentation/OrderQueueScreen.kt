@@ -20,9 +20,9 @@ fun OrderQueueScreenRoot() {
 
 @Composable
 fun OrderQueueScreen(
-    modifier: Modifier = Modifier,
     state: OrderQueueUiState,
     onAction: (OrderQueueActions) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
 }
@@ -30,5 +30,8 @@ fun OrderQueueScreen(
 @Preview
 @Composable
 private fun OrderQueueScreenPreview() {
-    OrderQueueScreen()
+    OrderQueueScreen(
+        state = OrderQueueUiState(),
+        onAction = { }
+    )
 }
