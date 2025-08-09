@@ -2,9 +2,16 @@ package zed.rainxch.augustminichallenges.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import zed.rainxch.augustminichallenges.R
+
+val hostGrotesk = FontFamily(
+    Font(R.font.host_grotesk_medium, FontWeight.Medium),
+    Font(R.font.host_grotesk_semi_bold, FontWeight.SemiBold),
+)
 
 // Set of Material typography styles to start with
 val Typography = Typography(
