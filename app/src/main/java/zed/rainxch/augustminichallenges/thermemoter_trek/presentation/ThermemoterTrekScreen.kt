@@ -84,7 +84,7 @@ fun ThermemoterTrekScreen(
                     .padding(24.dp)
                     .align(Alignment.Center)
                     .animateContentSize(),
-                horizontalAlignment = if(state.thermemoterState == ThermemoterState.Idle) {
+                horizontalAlignment = if (state.thermemoterState == ThermemoterState.Idle) {
                     Alignment.CenterHorizontally
                 } else Alignment.Start
             ) {
@@ -125,16 +125,17 @@ fun ThermemoterTrekScreen(
 
                         Spacer(Modifier.height(20.dp))
 
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(2),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalArrangement = Arrangement.Center
+                        LazyHorizontalGrid(
+                            modifier = Modifier.height(24.dp * 10 + 4.dp * (10 - 1)),
+                            rows = GridCells.Fixed(10),
+                            horizontalArrangement = Arrangement.spacedBy(24.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             items(20) { index ->
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(
-                                        space = 4.dp,
+                                        space = 4.dp, Alignment.CenterHorizontally
                                     ),
                                     modifier = Modifier
                                         .height(24.dp)
