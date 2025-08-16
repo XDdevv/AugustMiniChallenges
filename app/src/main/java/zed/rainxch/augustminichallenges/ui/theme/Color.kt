@@ -20,3 +20,15 @@ object ThermemoterColors {
     val textSecondary = Color(0xff66707F)
     val primary = Color(0xff37B98B)
 }
+
+object OrderQueueColors {
+
+    val surface = Color(0xffF4F6F6)
+    val surfaceHigher = Color(0xffFFFFFF)
+    val shadow = Color(0x2E364214)
+    val textPrimary = Color(0xff2E3642)
+    val textDisabled = Color(0xffB4BDCA)
+    val textSecondary = Color(0xff66707F)
+    val primary = Color(0xff37B98B)
+    val warning = Color(0xffFEB43C)
+}

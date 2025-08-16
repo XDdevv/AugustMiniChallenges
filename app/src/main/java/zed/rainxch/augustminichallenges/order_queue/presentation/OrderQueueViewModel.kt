@@ -8,6 +8,12 @@ data class OrderQueueUiState(
     val x: Int = 0,
 )
 
+enum class QueueState {
+    Idle,
+    Running,
+    Paused
+}
+
 sealed interface OrderQueueActions {
     data object OnStartClick : OrderQueueActions
     data object OnPauseClick : OrderQueueActions
