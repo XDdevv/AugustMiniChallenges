@@ -1,5 +1,6 @@
 package zed.rainxch.augustminichallenges.ui.theme
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -31,4 +32,22 @@ object OrderQueueColors {
     val textSecondary = Color(0xff66707F)
     val primary = Color(0xff37B98B)
     val warning = Color(0xffFEB43C)
+}
+
+object ParcelPigeonRaceColors {
+    val primary = Color(0xff37b98b)
+    val textPrimary = Color(0xff2E3642)
+    val textSecondary = Color(0xff66707F)
+    val textDisabled = Color(0xffB4BDCA)
+    val surface = Color(0xffF4F6F6)
+    val surfaceHigher = Color(0xffFFFFFF)
+    val surfaceHighest = Color(0xffE2E5E9)
+    val outline = Brush.linearGradient(
+        listOf(
+            Color(0xffFFFFFF).copy(alpha = .25f),
+            Color(0xffFFFFFF).copy(alpha = 0f)
+        )
+    )
+    val outlineImg = Color(0xff2E3642).copy(alpha = .05f)
+    val loadingImg = Color(0xff2E3642).copy(alpha = .5f)
 }
