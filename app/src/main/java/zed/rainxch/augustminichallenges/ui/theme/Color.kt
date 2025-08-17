@@ -51,3 +51,14 @@ object ParcelPigeonRaceColors {
     val outlineImg = Color(0xff2E3642).copy(alpha = .05f)
     val loadingImg = Color(0xff2E3642).copy(alpha = .5f)
 }
+
+object HeartbeatColors {
+    val primary = Color(0xff37b98b)
+    val textPrimary = Color(0xff2E3642)
+    val textSecondary = Color(0xff66707F)
+    val onPrimary = Color(0xffffffff)
+    val onPrimaryAlt = Color(0xffffffff).copy(alpha = .75f)
+    val surface = Color(0xfff4f6f6)
+    val surfaceHigher = Color(0xffffffff)
+    val error = Color(0xffF9465A)
+}
