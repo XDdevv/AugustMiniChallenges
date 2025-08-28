@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AugustMiniChallenges</string>
+    <string name="order_queue_outpost">Order Queue Outpost</string>
 </resources>
