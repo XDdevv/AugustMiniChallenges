@@ -54,6 +54,23 @@ object ParcelPigeonRaceColors {
     val loadingImg = Color(0xff2E3642).copy(alpha = .5f)
 }
 
+object LiveTrackerColors {
+    val primary = Color(0xff37b98b)
+    val textPrimary = Color(0xff2E3642)
+    val textSecondary = Color(0xff66707F)
+    val textDisabled = Color(0xffB4BDCA)
+    val surface = Color(0xffF4F6F6)
+    val surfaceHigher = Color(0xffFFFFFF)
+    val surfaceHighest = Color(0xffE2E5E9)
+    val outline = Brush.linearGradient(
+        listOf(
+            Color(0xffFFFFFF).copy(alpha = .25f),
+            Color(0xffFFFFFF).copy(alpha = 0f)
+        )
+    )
+    val error = Color(0xffF9465A)
+}
+
 object HeartbeatColors {
     val primary = Color(0xff37b98b)
     val textPrimary = Color(0xff2E3642)

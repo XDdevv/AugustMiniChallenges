@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import zed.rainxch.augustminichallenges.live_tracker.presentation.LiveTrackerRoot
 import zed.rainxch.augustminichallenges.order_queue.presentation.OrderQueueOutpostRoot
 import zed.rainxch.augustminichallenges.ui.theme.AugustMiniChallengesTheme
 
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AugustMiniChallengesTheme {
-                OrderQueueOutpostRoot()
+                LiveTrackerRoot()
             }
         }
     }
