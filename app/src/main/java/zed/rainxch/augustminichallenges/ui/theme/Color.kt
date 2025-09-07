@@ -62,6 +62,7 @@ object LiveTrackerColors {
     val surface = Color(0xffF4F6F6)
     val surfaceHigher = Color(0xffFFFFFF)
     val surfaceHighest = Color(0xffE2E5E9)
+    val onPrimary = Color(0xffffffff)
     val outline = Brush.linearGradient(
         listOf(
             Color(0xffFFFFFF).copy(alpha = .25f),
