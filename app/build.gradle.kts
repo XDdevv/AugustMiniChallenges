@@ -60,6 +60,7 @@ dependencies {
 //    implementation(libs.coil.compose)
 //    implementation(libs.coil.network.okhttp)
     implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
