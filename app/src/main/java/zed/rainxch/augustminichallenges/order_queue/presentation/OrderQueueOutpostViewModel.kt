@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.random.Random
-import kotlin.random.nextInt
-import kotlin.random.nextLong
 
 class OrderQueueOutpostViewModel : ViewModel() {
 
@@ -32,7 +30,13 @@ class OrderQueueOutpostViewModel : ViewModel() {
 
     fun onAction(action: OrderQueueOutpostAction) {
         when (action) {
-            OrderQueueOutpostAction.OnStartClick -> startProcessing()
+            OrderQueueOutpostAction.OnStartClick -> {
+                if (_state.value.state == OrderQueueState.Paused) {
+                    resumeProcessing()
+                } else {
+                    startProcessing()
+                }
+            }
             OrderQueueOutpostAction.OnPauseClick -> pauseProcessing()
         }
     }
@@ -40,42 +44,75 @@ class OrderQueueOutpostViewModel : ViewModel() {
     private fun startProcessing() {
         _state.update { it.copy(state = OrderQueueState.Running) }
 
-        // Producer: adds items to queue (increases progress)
-        producerJob = viewModelScope.launch {
-            while (true) {
-                _state.update {
-                    if (it.queueProgress < it.overflowQueueSize) {
-                        it.copy(
-                            queueProgress = it.queueProgress + 1,
-                            progressPercentage = ((it.queueProgress.toFloat() / (it.maxQueueSize.toFloat() - 1f)) * 100)
-                                .coerceAtMost(120f)
-                        )
-                    } else it
-                }
-                delay(Random.nextLong(150L..250L))
-            }
-        }
-
-        // Consumer: processes items from queue (decreases progress)
+        // Cancel any existing jobs
+        producerJob?.cancel()
         consumerJob?.cancel()
-        consumerJob = viewModelScope.launch {
-            while (true) {
-                _state.update {
-                    if (it.queueProgress > 0) {
-                        it.copy(
-                            queueProgress = it.queueProgress - 1,
-                            progressPercentage = (it.queueProgress.toFloat() / (it.maxQueueSize.toFloat() - 1f)) * 100
-                        )
-                    } else it
-                }
-                delay(250)
-            }
-        }
+
+        startProducer()
+        startConsumer()
+    }
+
+    private fun resumeProcessing() {
+        _state.update { it.copy(state = OrderQueueState.Running) }
+
+        // Only restart the consumer - producer should already be running
+        startConsumer()
     }
 
     private fun pauseProcessing() {
         _state.update { it.copy(state = OrderQueueState.Paused) }
 
+        // Only cancel the consumer - producer continues running
+        consumerJob?.cancel()
+        consumerJob = null
+    }
+
+    private fun startProducer() {
+        producerJob = viewModelScope.launch {
+            while (true) {
+                _state.update { currentState ->
+                    if (currentState.queueProgress < currentState.overflowQueueSize) {
+                        val newProgress = currentState.queueProgress + 1
+                        currentState.copy(
+                            queueProgress = newProgress,
+                            progressPercentage = calculateProgressPercentage(newProgress, currentState.maxQueueSize)
+                        )
+                    } else currentState
+                }
+                delay(250L) // Fixed 250ms delay for producer
+            }
+        }
+    }
+
+    private fun startConsumer() {
+        consumerJob = viewModelScope.launch {
+            while (true) {
+                _state.update { currentState ->
+                    if (currentState.queueProgress > 0) {
+                        val newProgress = currentState.queueProgress - 1
+                        currentState.copy(
+                            queueProgress = newProgress,
+                            progressPercentage = calculateProgressPercentage(newProgress, currentState.maxQueueSize)
+                        )
+                    } else currentState
+                }
+                // Random delay between 100-250ms for consumer (faster than producer)
+                delay(Random.nextLong(100L, 251L))
+            }
+        }
+    }
+
+    private fun calculateProgressPercentage(progress: Int, maxQueueSize: Int): Float {
+        return if (maxQueueSize > 1) {
+            (progress.toFloat() / (maxQueueSize.toFloat() - 1f)) * 100f
+        } else {
+            0f
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        producerJob?.cancel()
         consumerJob?.cancel()
     }
 }

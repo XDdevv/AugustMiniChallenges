@@ -2,7 +2,6 @@ package zed.rainxch.augustminichallenges.live_tracker.presentation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.core.util.toRange
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
