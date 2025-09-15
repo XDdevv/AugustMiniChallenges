@@ -71,6 +71,7 @@ class LiveTrackerViewModel : ViewModel() {
             it.copy(
                 tickerRate = "4/s",
                 status = LiveTrackerStatus.RUNNING,
+                updateUi = true,
             )
         }
 
@@ -105,7 +106,9 @@ class LiveTrackerViewModel : ViewModel() {
             )
         }
 
-        _state.update { it.copy(items = list.toImmutableList()) }
+        if (_state.value.updateUi) {
+            _state.update { it.copy(items = list.toImmutableList()) }
+        }
 
     }
 
@@ -114,6 +117,7 @@ class LiveTrackerViewModel : ViewModel() {
             it.copy(
                 tickerRate = "--",
                 status = LiveTrackerStatus.PAUSED,
+                updateUi = false,
             )
         }
 

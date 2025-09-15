@@ -8,6 +8,7 @@ data class LiveTrackerState(
     val status: LiveTrackerStatus = LiveTrackerStatus.RUNNING,
     val items: ImmutableList<TrackItem> = persistentListOf(),
     val tickerRate: String = "4/s",
+    val updateUi: Boolean = true,
 )
 
 enum class LiveTrackerStatus(
