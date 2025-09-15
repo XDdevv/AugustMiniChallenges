@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import zed.rainxch.augustminichallenges.live_tracker.presentation.model.DifferenceType
 import zed.rainxch.augustminichallenges.live_tracker.presentation.model.TrackItem
@@ -44,15 +45,15 @@ class LiveTrackerViewModel : ViewModel() {
     fun onAction(action: LiveTrackerAction) {
         when (action) {
             LiveTrackerAction.OnBreakXETRAClick -> {
-                val list = _state.value.items.toMutableList()
-
-                val index = list.indexOfFirst { it.currency == "XETRA" }
+                val index = rawItems.indexOfFirst { it.currency == "XETRA" }
 
                 if (index != -1) {
-                    list[index] = list[index].copy(isFeedDown = true)
+                    rawItems[index] = rawItems[index].copy(isFeedDown = true)
                 }
 
-                _state.update { it.copy(items = list.toImmutableList()) }
+                if (_state.value.updateUi) {
+                    _state.update { it.copy(items = rawItems.toImmutableList()) }
+                }
 
                 startUnfeedDownJob()
             }
@@ -68,20 +69,33 @@ class LiveTrackerViewModel : ViewModel() {
     }
 
     private fun startUpdating() {
+        if (updateJob != null && updateJob!!.isActive) {
+            _state.update {
+                it.copy(
+                    tickerRate = "4/s",
+                    status = LiveTrackerStatus.RUNNING,
+                    updateUi = true,
+                    items = rawItems.toImmutableList()
+                )
+            }
+            return
+        }
+
+        // First start
         _state.update {
             it.copy(
                 tickerRate = "4/s",
                 status = LiveTrackerStatus.RUNNING,
                 updateUi = true,
+                items = rawItems.toImmutableList()
             )
         }
 
         updateJob = viewModelScope.launch {
-            _state.value.items.forEach { item ->
+            rawItems.forEach { item ->
                 launch {
-                    while (true) {
+                    while (isActive) {
                         delay(item.updateDelayMs)
-
                         updateItem(item)
                     }
                 }
@@ -116,11 +130,9 @@ class LiveTrackerViewModel : ViewModel() {
             it.copy(
                 tickerRate = "--",
                 status = LiveTrackerStatus.PAUSED,
-                updateUi = false,
+                updateUi = false
             )
         }
-
-        updateJob?.cancel()
     }
 
     private fun loadInitialData() {
@@ -221,15 +233,15 @@ class LiveTrackerViewModel : ViewModel() {
         viewModelScope.launch {
             delay(4.seconds)
 
-            val list = _state.value.items.toMutableList()
-
-            val index = list.indexOfFirst { it.currency == "XETRA" }
+            val index = rawItems.indexOfFirst { it.currency == "XETRA" }
 
             if (index != -1) {
-                list[index] = list[index].copy(isFeedDown = false)
+                rawItems[index] = rawItems[index].copy(isFeedDown = false)
             }
 
-            _state.update { it.copy(items = list.toImmutableList()) }
+            if (_state.value.updateUi) {
+                _state.update { it.copy(items = rawItems.toImmutableList()) }
+            }
         }
     }
 
