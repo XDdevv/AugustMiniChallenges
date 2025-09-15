@@ -39,6 +39,7 @@ class LiveTrackerViewModel : ViewModel() {
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = LiveTrackerState()
         )
+    private val rawItems = mutableListOf<TrackItem>()
 
     fun onAction(action: LiveTrackerAction) {
         when (action) {
@@ -89,17 +90,16 @@ class LiveTrackerViewModel : ViewModel() {
     }
 
     private fun updateItem(item: TrackItem) {
-        val list = _state.value.items.toMutableList()
-        val index = _state.value.items.indexOfFirst { it.id == item.id }
-        if (index != -1 && !list[index].isFeedDown) {
-            val randomValue = list[index].value + (-3..5).random()
+        val index = rawItems.indexOfFirst { it.id == item.id }
+        if (index != -1 && !rawItems[index].isFeedDown) {
+            val randomValue = rawItems[index].value + (-3..5).random()
             val type = when {
-                list[index].value > randomValue -> DifferenceType.DECREASE
-                list[index].value < randomValue -> DifferenceType.INCREASE
+                rawItems[index].value > randomValue -> DifferenceType.DECREASE
+                rawItems[index].value < randomValue -> DifferenceType.INCREASE
                 else -> DifferenceType.EQUAL
             }
 
-            list[index] = list[index].copy(
+            rawItems[index] = rawItems[index].copy(
                 value = randomValue,
                 differenceType = type,
                 latestUpdateTime = getCurrentTimeFormatted()
@@ -107,9 +107,8 @@ class LiveTrackerViewModel : ViewModel() {
         }
 
         if (_state.value.updateUi) {
-            _state.update { it.copy(items = list.toImmutableList()) }
+            _state.update { it.copy(items = rawItems.toImmutableList()) }
         }
-
     }
 
     private fun stopUpdating() {
@@ -198,6 +197,9 @@ class LiveTrackerViewModel : ViewModel() {
                     updateDelayMs = 1000
                 ),
             )
+
+            rawItems.clear()
+            rawItems.addAll(feeds)
 
             _state.update {
                 it.copy(
